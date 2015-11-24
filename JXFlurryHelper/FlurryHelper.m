@@ -188,6 +188,9 @@ void uncaughtExceptionHandler(NSException *exception)
     objc_setAssociatedObject(nativeAd,&kAdAssociatedObjectKey,parameters,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     //Request the Ad from Flurry
     [nativeAd fetchAd];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        [nativeAd fetchAd];
+//    });
     return nativeAd;
 }
 

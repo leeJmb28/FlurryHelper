@@ -12,7 +12,6 @@
 @interface AdViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     NSMutableArray *newsList;
-    NSMutableArray *tempAdList;
 }
 @end
 
@@ -41,8 +40,6 @@
         [self.view addSubview:tableView];
         
         newsList = [NSMutableArray array];
-        tempAdList = [NSMutableArray array];
-        __weak NSMutableArray *weakNewsList = newsList;
         __weak UITableView *weakTableView = tableView;
         for (int n=1; n<=20; n++)
         {
@@ -50,15 +47,14 @@
                 id tempAd = [[FlurryHelper sharedHelper] getNativeAdWithHandler:^(BOOL success, id response) {
                     
                     if (success) {
+                        
                         [weakTableView beginUpdates];
-                        FlurryAdNative *ad = response;
-                        [weakNewsList insertObject:ad atIndex:n-1];
                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:n-1 inSection:0];
-                        [weakTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [weakTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                         [weakTableView endUpdates];
                     }
                 }];
-                [tempAdList addObject:tempAd];
+                [newsList addObject:tempAd];
                 
             } else {
                 NSDictionary *news = @{@"headline":[NSString stringWithFormat:@"News-%d",n],
